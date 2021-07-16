@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd" xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping">
+    <entity name="App\Domains\User\Domain\Models\User\CommonOrderInvoice" table="common_order_invoice">
+        <indexes>
+            <index name="idx_order_id" columns="order_id"/>
+            <index name="idx_user_id" columns="user_id"/>
+        </indexes>
+        <id name="id" type="integer" column="id">
+            <generator strategy="IDENTITY"/>
+        </id>
+        <field name="businessCode" type="string" column="business_code" length="50" nullable="true">
+            <options>
+                <option name="fixed"/>
+                <option name="comment">common_business的业务场景代号</option>
+            </options>
+        </field>
+        <field name="userId" type="integer" column="user_id" nullable="false">
+            <options>
+                <option name="unsigned"/>
+                <option name="comment">用户ID</option>
+            </options>
+        </field>
+        <field name="price" type="decimal" column="price" precision="10" scale="2" nullable="false">
+            <options>
+                <option name="comment">发票金额</option>
+            </options>
+        </field>
+        <field name="type" type="string" column="type" length="25" nullable="false">
+            <options>
+                <option name="fixed"/>
+                <option name="comment">发票类型(VAT:增值税电子普通发票|ST:专票)</option>
+            </options>
+        </field>
+        <field name="titleType" type="string" column="title_type" length="25" nullable="false">
+            <options>
+                <option name="fixed"/>
+                <option name="comment">抬头类型(PERSONAL:个人|ENTERPRISE:企业)</option>
+            </options>
+        </field>
+        <field name="title" type="string" column="title" length="255" nullable="false">
+            <options>
+                <option name="fixed"/>
+                <option name="comment">发票抬头</option>
+            </options>
+        </field>
+        <field name="taxNumber" type="string" column="tax_number" length="50" nullable="false">
+            <options>
+                <option name="fixed"/>
+                <option name="comment">税号/身份证号</option>
+            </options>
+        </field>
+        <field name="email" type="string" column="email" length="255" nullable="false">
+            <options>
+                <option name="fixed"/>
+                <option name="comment">邮箱</option>
+            </options>
+        </field>
+        <field name="businessAddress" type="string" column="business_address" length="255" nullable="true">
+            <options>
+                <option name="fixed"/>
+                <option name="comment">企业地址</option>
+            </options>
+        </field>
+        <field name="businessPhone" type="string" column="business_phone" length="50" nullable="true">
+            <options>
+                <option name="fixed"/>
+                <option name="comment">企业电话</option>
+            </options>
+        </field>
+        <field name="openBank" type="string" column="open_bank" length="50" nullable="true">
+            <options>
+                <option name="fixed"/>
+                <option name="comment">开户银行</option>
+            </options>
+        </field>
+        <field name="bankCard" type="string" column="bank_card" length="50" nullable="true">
+            <options>
+                <option name="fixed"/>
+                <option name="comment">银行卡号</option>
+            </options>
+        </field>
+        <field name="status" type="string" column="status" length="50" nullable="false">
+            <options>
+                <option name="fixed"/>
+                <option name="comment">发票状态（WAIT:开票中|SUCCESS:开票成功|FAIL:开票失效）</option>
+                <option name="default">WAIT</option>
+            </options>
+        </field>
+        <field name="detailed" type="string" column="detailed" length="50" nullable="false">
+            <options>
+                <option name="fixed"/>
+                <option name="comment">发票明细（YES:是|NO:否）</option>
+                <option name="default">YES</option>
+            </options>
+        </field>
+        <field name="defaults" type="string" column="defaults" length="25" nullable="true">
+            <options>
+                <option name="fixed"/>
+                <option name="comment">设置为默认抬头 DEFAULTS 标记</option>
+            </options>
+        </field>
+        <field name="voucherPic" type="string" column="voucher_pic" length="255" nullable="true">
+            <options>
+                <option name="fixed"/>
+                <option name="comment">开票凭证图片</option>
+            </options>
+        </field>
+        <field name="remark" type="string" column="remark" length="255" nullable="true">
+            <options>
+                <option name="fixed"/>
+                <option name="comment">备注</option>
+            </options>
+        </field>
+        <field name="handleAt" type="string" column="handle_at" length="50" nullable="true">
+            <options>
+                <option name="comment">商家处理时间</option>
+            </options>
+        </field>
+
+        <field name="createdAt" type="datetime">
+            <gedmo:timestampable on="create"/>
+        </field>
+        <field name="updatedAt" type="datetime">
+            <gedmo:timestampable on="update"/>
+        </field>
+        <field name="deletedAt" type="datetime" column="deleted_at" nullable="true"/>
+        <gedmo:soft-deleteable field-name="deletedAt" time-aware="false" hard-delete="true"/>
+
+        <many-to-one field="order" target-entity="App\Domains\Order\Domain\Models\Order\CommonOrder" fetch="LAZY">
+            <join-column name="order_id" referenced-column-name="id"/>
+        </many-to-one>
+
+    </entity>
+</doctrine-mapping>

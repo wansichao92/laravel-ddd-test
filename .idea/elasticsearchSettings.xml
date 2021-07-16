@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ElasticsearchConfiguration">
+    <option name="clusterConfigurations">
+      <map>
+        <entry key="29484fee-284a-43f1-aaed-09dd3ba24ebc">
+          <value>
+            <l>
+              <option name="id" value="29484fee-284a-43f1-aaed-09dd3ba24ebc" />
+              <option name="label" value="localhost-es" />
+              <option name="url" value="http://localhost:9200" />
+            </l>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="id" value="YWR9eHd7Z2lzfX13eQ==" />
+    <option name="searchRequestHistory">
+      <map>
+        <entry key="29484fee-284a-43f1-aaed-09dd3ba24ebc" value="W3sicGF0aCI6Im15X2luZGV4IiwiYm9keSI6IntcbiAgXCJmcm9tXCI6IDAsXG4gIFwic2l6ZVwiOiAxMCxcbiAgXCJxdWVyeVwiOiB7XG4gICAgXCJtYXRjaF9hbGxcIjoge31cbiAgfVxufSIsIm1ldGhvZCI6IkdFVCJ9XQ==" />
+      </map>
+    </option>
+  </component>
+</project>

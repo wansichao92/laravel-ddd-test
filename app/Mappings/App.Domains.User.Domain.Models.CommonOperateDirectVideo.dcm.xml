@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="App.Domains.User.Domain.Models.CommonOperateDirectVideo" table="common_operate_direct_video">
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="businessCode" type="string" column="business_code" length="50" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">common_business的业务场景代号</option>
+      </options>
+    </field>
+    <field name="userId" type="integer" column="user_id" nullable="true">
+      <options>
+        <option name="unsigned"/>
+        <option name="comment">商家id</option>
+      </options>
+    </field>
+    <field name="name" type="string" column="name" length="255" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">视频名称</option>
+      </options>
+    </field>
+    <field name="videoId" type="string" column="video_id" length="255" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">视频id(key)</option>
+      </options>
+    </field>
+    <field name="videoImg" type="string" column="video_img" length="255" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">视频封面</option>
+      </options>
+    </field>
+    <field name="productId" type="integer" column="product_id" nullable="false">
+      <options>
+        <option name="unsigned"/>
+        <option name="comment">商品id</option>
+      </options>
+    </field>
+    <field name="isOpen" type="string" column="is_open" length="10" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">上线状态：(上线:UP|下线:DOWN)</option>
+      </options>
+    </field>
+    <field name="status" type="string" column="status" length="50" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">审核状态：(待审核:WAIT|已拒绝:FAIL)</option>
+      </options>
+    </field>
+    <field name="remark" type="string" column="remark" length="255" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">审核备注</option>
+      </options>
+    </field>
+    <field name="sort" type="integer" column="sort" nullable="false">
+      <options>
+        <option name="unsigned">1</option>
+        <option name="comment">排序</option>
+        <option name="default">0</option>
+      </options>
+    </field>
+    <field name="isTop" type="integer" column="is_top" nullable="false">
+      <options>
+        <option name="unsigned"/>
+        <option name="comment">是否置顶</option>
+        <option name="default">0</option>
+      </options>
+    </field>
+    <field name="createdAt" type="datetime" column="created_at" nullable="true">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <field name="updatedAt" type="datetime" column="updated_at" nullable="true">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <field name="deletedAt" type="datetime" column="deleted_at" nullable="true"/>
+  </entity>
+</doctrine-mapping>
