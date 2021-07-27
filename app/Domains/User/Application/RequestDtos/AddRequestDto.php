@@ -18,6 +18,9 @@ class AddRequestDto extends BaseRequestDto
     /** @var string $password */
     public $password;
 
+    /** @var string|null $status */
+    public $status = 'ON';
+
     public function rules()
     {
         return [

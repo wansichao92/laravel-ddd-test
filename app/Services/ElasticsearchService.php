@@ -148,7 +148,7 @@ class ElasticsearchService
     {
         $isData = $this->get($id);
         if (!$isData)
-            return "id:{$id}不存在，无法删除";
+            return "ES删除失败 -- id:{$id}不存在，无法删除";
 
         $params = [
             'index' => $this->index,

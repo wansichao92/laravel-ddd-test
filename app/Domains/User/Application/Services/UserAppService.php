@@ -2,9 +2,13 @@
 
 namespace App\Domains\User\Application\Services;
 
+use App\Domains\Product\Domain\Service\ProductLogService;
 use App\Domains\User\Application\ResponseDtos\URLResponseDto;
 use App\Domains\User\Domain\Models\User\CommonUser;
 use App\Domains\User\Domain\Service\UserDomainService;
+use App\Jobs\CommonUserPush;
+use App\Services\ElasticsearchService;
+use App\Services\HelpService;
 use App\Supports\ClassFactory;
 use App\Domains\User\Supports\DomainClass;
 use App\Domains\User\Base\Repository\UserRepository;
@@ -21,31 +25,98 @@ class UserAppService
 
     public function add($requestDto)
     {
-        //ClassFactory::getTestService()->say();
-
         $checkName = $this->_i_user_repository->getUserDataCountByName($requestDto->name);
         if ($checkName) {
-            $errorLog = "姓名{$requestDto->name}已存在，添加数据失败！";
-            TestQueue::dispatch($errorLog)->onQueue('test01');
-            throw new \Exception($errorLog);
+            throw new \Exception("姓名{$requestDto->name}已存在，添加数据失败！");
         }
 
+        $this->_i_user_repository->beginTransaction();
+
         $entity = (new UserDomainService())->insert($requestDto->toArray());
-        $this->_i_user_repository->create($entity);
-        $this->_i_user_repository->flush();
-        TestQueue::dispatch("姓名{$requestDto->name}添加成功！")->onQueue('test01');
+
+        try {
+            $this->_i_user_repository->create($entity);
+            $this->_i_user_repository->flush();
+            CommonUserPush::dispatch(['id'=>$entity->getId()]);
+            $this->_i_user_repository->commit();
+        } catch (\Exception $e) {
+            $this->_i_user_repository->rollback();
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    public function edit($requestDto)
+    {
+        $user = $this->_i_user_repository->find($requestDto->id);
+        if (!$user) {
+            throw new \Exception("数据不存在");
+        }
+
+        $this->_i_user_repository->beginTransaction();
+
+        $entity = (new UserDomainService())->updata($user,$requestDto->toArray());
+
+        try {
+            $this->_i_user_repository->create($entity);
+            $this->_i_user_repository->flush();
+            CommonUserPush::dispatch(['id'=>$entity->getId()]);
+            $this->_i_user_repository->commit();
+        } catch (\Exception $e) {
+            $this->_i_user_repository->rollback();
+            throw new \Exception($e->getMessage());
+        }
     }
 
     public function list($requestDto)
     {
-        $lists = $this->_i_user_repository->getUserList($requestDto->toArray(), $requestDto->pageSize, $requestDto->page);
+        /*$lists = $this->_i_user_repository->getUserList($requestDto->toArray(), $requestDto->pageSize, $requestDto->page);
         $count = $lists->total();
         foreach ($lists as $key=>$entity) {
-            /* @var $entity CommonUser */
             $list[$key] = $entity->toArray();
+        }*/
+
+
+        $data = $this->search($requestDto);
+        $lists = $data['data'];
+        $count = $data['count'];
+
+        $list = [];
+        foreach ($lists as $key=>$value) {
+            $list[$key] = $value['_source'];
         }
 
         return DomainClass::getListResponseDto(compact("count", "list"));
+    }
+
+    public function search($requestDto)
+    {
+        $info[] = ["match"=>["status"=>"ON"]];
+
+        if(isset($requestDto->id) && !empty($requestDto->id)){
+            $info[] = ["match"=>["id"=>$requestDto->id]];
+        }
+        if(isset($requestDto->name) && !empty($requestDto->name)){
+            $info[] = ["match_phrase_prefix"=>["name"=>$requestDto->name]];
+        }
+        if(isset($requestDto->password) && !empty($requestDto->password)){
+            $info[] = ["match"=>["password"=>$requestDto->password]];
+        }
+
+        $queryInfo['bool']['must'] = $info;
+        $searcher['function_score']['query'] = $queryInfo;
+        $searcher['function_score']['functions'] = [];
+        $searcher['function_score']['score_mode'] = "sum";
+        $searcher['function_score']['boost_mode'] = "multiply";
+
+        $order = [];
+        if((isset($requestDto->sort) && !empty($requestDto->sort)) && (isset($requestDto->order) && !empty($requestDto->order))){
+            $order[] = [$requestDto->sort=>["order"=>$requestDto->order]];
+        }
+
+        $esService = new ElasticsearchService('elasticsearch.common_user_index');
+        $data = $esService->search(['page'=>$requestDto->page,'pageSize'=>$requestDto->pageSize], $searcher, $order);
+
+        return $data;
     }
 
     public function export($requestDto)

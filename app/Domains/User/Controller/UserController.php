@@ -10,15 +10,23 @@ class UserController extends Controller
 {
     public function add(UserRepository $repository)
     {
-        $data = ['name'=>'test08', 'password'=>'$test08$Password'];
+        $data = request()->input('data');
         $requestDto = DomainClass::getAddRequestDto($data);
         $appService = DomainClass::getUserAppService($repository);
         return $this->success($appService->add($requestDto));
     }
 
+    public function edit(UserRepository $repository)
+    {
+        $data = request()->input('data');
+        $requestDto = DomainClass::getEditRequestDto($data);
+        $appService = DomainClass::getUserAppService($repository);
+        return $this->success($appService->edit($requestDto));
+    }
+
     public function list(UserRepository $repository)
     {
-        $data = ['id'=>'', 'name'=>'', 'pageSize'=>10, 'page'=>1];
+        $data = request()->input('data');
         $requestDto = DomainClass::getListRequestDto($data);
         $appService = DomainClass::getUserAppService($repository);
         return $this->success($appService->list($requestDto));
@@ -26,7 +34,7 @@ class UserController extends Controller
 
     public function export(UserRepository $repository)
     {
-        $data = ['id'=>'', 'name'=>'', 'status'=>'OFF', 'pageSize'=>999999, 'page'=>1];
+        $data = request()->input('data');
         $requestDto = DomainClass::getListRequestDto($data);
         $appService = DomainClass::getUserAppService($repository);
         return $this->success($appService->export($requestDto));

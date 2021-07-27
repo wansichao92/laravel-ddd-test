@@ -178,6 +178,7 @@ return [
         Ronghz\LaravelDdd\LaravelDddServiceProvider::class,
         LaravelDoctrine\Extensions\GedmoExtensionsServiceProvider::class,
         LaravelDoctrine\ORM\DoctrineServiceProvider::class,
+        SwooleTW\Http\LaravelServiceProvider::class,
 
     ],
 

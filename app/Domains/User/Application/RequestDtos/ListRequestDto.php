@@ -19,6 +19,9 @@ class ListRequestDto extends BaseRequestDto
     /** @var string|null $name */
     public $name;
 
+    /** @var string|null $password */
+    public $password;
+
     /** @var string|null $status */
     public $status;
 

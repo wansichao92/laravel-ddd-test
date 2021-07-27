@@ -35,6 +35,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('command:test01')->everyMinute()->withoutOverlapping();
         $schedule->command('command:test02')->everyMinute()->withoutOverlapping();
+        $schedule->command('command:common_user_to_es')->everyMinute()->withoutOverlapping();
     }
 
     /**

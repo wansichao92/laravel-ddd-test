@@ -17,6 +17,12 @@ class UserDomainService
         return $commonUser;
     }
 
+    public function updata(CommonUser $commonUser, array $requestDto)
+    {
+        $commonUser->validAndSet($requestDto);
+        return $commonUser;
+    }
+
     public function importFileToData($importRequestDto)
     {
         $match = preg_match('/^(data:\s*application\/(.*);base64,)/', $importRequestDto->file, $result);

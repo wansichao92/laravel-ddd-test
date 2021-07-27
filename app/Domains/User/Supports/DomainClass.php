@@ -4,6 +4,7 @@ namespace App\Domains\User\Supports;
 
 use App\Domains\User\Application\Services\UserAppService;
 use App\Domains\User\Application\RequestDtos\AddRequestDto;
+use App\Domains\User\Application\RequestDtos\EditRequestDto;
 use App\Domains\User\Application\RequestDtos\ListRequestDto;
 use App\Domains\User\Application\RequestDtos\ImportRequestDto;
 use App\Domains\User\Application\ResponseDtos\ListResponseDto;
@@ -20,6 +21,11 @@ class DomainClass
     public static function getAddRequestDto($data)
     {
         return new AddRequestDto($data);
+    }
+
+    public static function getEditRequestDto($data)
+    {
+        return new EditRequestDto($data);
     }
 
     public static function getListRequestDto($data)

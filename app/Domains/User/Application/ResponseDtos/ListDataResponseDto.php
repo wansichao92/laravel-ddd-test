@@ -19,13 +19,15 @@ class ListDataResponseDto extends FlexibleDataTransferObject
     /** @var string|null $status */
     public $status;
 
-    /** @var string $createdAt */
+    /** @var string|null $createdAt */
     public $createdAt;
 
 
     public function all() : array
     {
-        $this->createdAt = date('Y-m-d H:i:s', strtotime($this->createdAt));
+        if (!empty($this->createdAt)) {
+            $this->createdAt = date('Y-m-d H:i:s', strtotime($this->createdAt));
+        }
         $this->status = UserStatusEnum::getText($this->status);
 
         return parent::all();
